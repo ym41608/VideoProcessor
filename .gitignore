@@ -15,6 +15,7 @@
 *.gif
 *.fig
 *.mov
+*.png
 
 *.mat
 *.zip

@@ -1,29 +1,27 @@
-% Calculate the valid template (board) region appeared in the camera image
+% Inverse warping the mask to camera image
 %
 % Usage:
-%   BI = markerTransformation(I, T, H)
+%   [Imask, x, y] = maskTransformation(I, T, M, nm_mat)
 %
 % Inputs:
 %   I      = camera image
-%   T      = template image
-%   H      = 3x3 homography transformation matrix
+%   T      = mask image
+%   M      = 3x3 homography transformation matrix
 %   nm_mat = normalization matrix
 %
 % Output:
-%   T_valid = valid Template region
-%   x_valid = valid x coordinates
-%   y_valid = valid y coordinates
+%   Imask   = warped mask image
+%   x       = minmax of x coordinates
+%   y       = minmax of y coordinates
 
-function [Imask, x, y] = maskTransformation(I, T, in_mat, ex_mat, coor)
+function [Imask, x, y] = maskTransformation(I, T, M, nm_mat)
   
   % size
   [I_h, I_w, ~] = size(I);
   [T_h, T_w, ~] = size(T);
   
-  % Homography 3465
-  nm_mat = eye(3);
-  nm_mat(1:2, :) = 0.5 * ( coor/ 12350) * [1/T_w, 0, -1/(2*T_w) - 0.5; 0, -1/T_h, 1/(2*T_h) + 0.5];
-  H = in_mat(1:3, 1:3) * ex_mat(1:3, [1 2 4]) * nm_mat;
+  % Homography
+  H = M * nm_mat;
   
   % boundary  
   boundary = [1,1,T_h,T_h;1,T_w,1,T_w]; 
